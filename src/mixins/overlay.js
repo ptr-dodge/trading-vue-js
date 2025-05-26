@@ -44,13 +44,20 @@ export default {
         })
 
         // Overlay meta-props (adjusting behaviour)
-        this._$emit('layer-meta-props', {
+        const metaProps = {
             grid_id: this.$props.grid_id,
             layer_id: this.$props.id,
             legend: this.legend,
             data_colors: this.data_colors,
             y_range: this.y_range
-        })
+        }
+        
+        // Debug: Log meta props emission
+        if (typeof document !== 'undefined') {
+            console.log('Emitting layer-meta-props for', this.$options.name, 'with layer_id:', this.$props.id, 'legend:', typeof this.legend)
+        }
+        
+        this._$emit('layer-meta-props', metaProps)
         this.exec_script()
         this.mouse = new Mouse(this)
         if (this.init_tool) this.init_tool()

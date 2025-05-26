@@ -43,8 +43,11 @@ export default {
         // We need to know which components we will use.
         // Custom overlay components overwrite built-ins:
         var tools = []
+        var registryDebug = []
         this._list.forEach((x, i) => {
             let use_for = x.methods.use_for()
+            // Debug: Accumulate registry info
+            registryDebug.push(x.name + ':' + use_for.join(','))
             if (x.methods.tool) tools.push({
                 use_for, info: x.methods.tool()
             })
@@ -52,6 +55,10 @@ export default {
                 this._registry[indicator] = i
             })
         })
+        // Debug: Show all registry entries
+        if (typeof document !== 'undefined') {
+            document.title = 'Registry: ' + registryDebug.join(' | ');
+        }
         this.$emit('custom-event', {
             event: 'register-tools', args: tools
         })
@@ -114,8 +121,20 @@ export default {
             // to this._registry; returns compo list
             let comp_list = [], count = {}
 
+            // Debug: log registry and data
+            // eslint-disable-next-line no-console
+            console.log('[Grid.vue] Registry:', this._registry);
+            // eslint-disable-next-line no-console
+            console.log('[Grid.vue] Data:', this.$props.data);
+
+            var dataTypes = []
             for (var d of this.$props.data) {
+                // eslint-disable-next-line no-console
+                console.log('[Grid.vue] Processing data item:', d.type, 'registry index:', this._registry[d.type]);
+                dataTypes.push(d.type || 'undefined')
                 let comp = this._list[this._registry[d.type]]
+                // eslint-disable-next-line no-console
+                console.log('[Grid.vue] Found component:', comp ? comp.name : 'null');
                 if (comp) {
                     if(comp.methods.calc) {
                         comp = this.inject_renderer(comp)
@@ -132,6 +151,12 @@ export default {
                     count[d.type] = 0
                 }
             }
+            
+            // Debug: Show data types being processed
+            if (typeof document !== 'undefined') {
+                document.title = 'get_overlays called! Data types: [' + dataTypes.join(',') + '] | Registry has Candles: ' + (this._registry['Candles'] !== undefined);
+            }
+            
             return comp_list.map((x, i) => h(x.cls, {
                     on: this.layer_events,
                     attrs: Object.assign(this.common_props(), {

@@ -64,6 +64,10 @@ export default {
             this.$emit('sidebar-transform', s)
         },
         emit_meta_props(d) {
+            // Debug: Log meta props reception
+            if (typeof document !== 'undefined') {
+                document.title = `Meta props for layer ${d.layer_id}: ${d.legend ? 'has legend' : 'no legend'}`
+            }
             this.$set(this.meta_props, d.layer_id, d)
             this.$emit('layer-meta-props', d)
         },

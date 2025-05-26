@@ -15,6 +15,28 @@ export default {
         meta_info() {
             return { author: 'C451', version: '1.2.1' }
         },
+        legend(values) {
+            // OHLCV legend for candles
+            // values format: [timestamp, open, high, low, close, volume]
+            if (!values || values.length < 6) {
+                return [
+                    { value: 'n/a', color: this.colorCandleUp },
+                    { value: 'n/a', color: this.colorCandleUp },
+                    { value: 'n/a', color: this.colorCandleDw },
+                    { value: 'n/a', color: this.colorCandleDw },
+                    { value: 'n/a', color: this.colorVolUp }
+                ]
+            }
+            
+            const prec = this.$props.layout.prec || 2
+            return [
+                { value: values[1].toFixed(prec), color: this.colorCandleUp }, // Open
+                { value: values[2].toFixed(prec), color: this.colorCandleUp }, // High  
+                { value: values[3].toFixed(prec), color: this.colorCandleDw }, // Low
+                { value: values[4].toFixed(prec), color: this.colorCandleDw }, // Close
+                { value: values[5] ? values[5].toFixed(2) : 'n/a', color: this.colorVolUp } // Volume
+            ]
+        },
         init() {
             this.price = new Price(this)
         },

@@ -52,12 +52,17 @@ export default {
         Keyboard
     },
     mounted() {
-        // Debug: log ohlcv and sub data to verify chart data flow
-        // Remove this after debugging
+        // Debug: log basic data to verify chart data flow
         // eslint-disable-next-line no-console
-        console.log('[Chart.vue] ohlcv:', this.ohlcv);
+        console.log('[Chart.vue] Mounted - data prop:', this.$props.data);
         // eslint-disable-next-line no-console
-        console.log('[Chart.vue] sub:', this.sub);
+        console.log('[Chart.vue] Mounted - ohlcv length:', this.$props.data.ohlcv ? this.$props.data.ohlcv.length : 0);
+        
+        // Debug: Check main_section data structure
+        // eslint-disable-next-line no-console
+        console.log('[Chart.vue] main_section data:', this.main_section.data);
+        // eslint-disable-next-line no-console
+        console.log('[Chart.vue] chart computed:', this.chart);
     },
     created() {
 
@@ -205,8 +210,12 @@ export default {
             })
         },
         section_props(i) {
-            return i === 0 ?
-                this.main_section : this.sub_section
+            const props = i === 0 ? this.main_section : this.sub_section
+            // Debug: Log section props data
+            if (typeof document !== 'undefined' && i === 0) {
+                document.title = `Section props data length: ${props.data ? props.data.length : 0} | First item type: ${props.data && props.data[0] ? props.data[0].type : 'none'}`
+            }
+            return props
         },
         init_range() {
             this.calc_interval()

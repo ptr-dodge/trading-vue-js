@@ -33,10 +33,26 @@ export default class DCCore extends DCEvents {
     // Init Data Structure v1.1
     init_data($root) {
 
+        // eslint-disable-next-line no-console
+        console.log('[DataCube] init_data called, current data:', this.data);
+
         if (!('chart' in this.data)) {
             this.data['chart'] = {
                 type: 'Candles',
                 data: this.data.ohlcv || []
+            }
+            // eslint-disable-next-line no-console
+            console.log('[DataCube] Created chart property:', this.data.chart);
+            // Debug: Change page title to show chart was created
+            if (typeof document !== 'undefined') {
+                document.title = 'Chart Created: ' + this.data.chart.type;
+            }
+        } else {
+            // eslint-disable-next-line no-console
+            console.log('[DataCube] Chart property already exists:', this.data.chart);
+            // Debug: Change page title to show chart exists
+            if (typeof document !== 'undefined') {
+                document.title = 'Chart Exists: ' + this.data.chart.type;
             }
         }
 
