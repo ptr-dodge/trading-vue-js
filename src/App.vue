@@ -35,9 +35,9 @@ export default {
             width: window.innerWidth,
             height: window.innerHeight,
             colors: {
-                colorBack: '#fff',
-                colorGrid: '#eee',
-                colorText: '#333',
+                colorBack: '#151515',
+                colorGrid: '#5c5c5c',
+                colorText: '#ffffff',
             }
         };
     }

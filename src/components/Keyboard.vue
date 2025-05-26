@@ -17,7 +17,7 @@ export default {
         window.removeEventListener('keyup', this.keyup)
         window.removeEventListener('keypress', this.keypress)
     },
-    render(h) { return h() },
+    render() { return null },
     methods: {
         keydown (event) {
             for (var id in this._listeners) {

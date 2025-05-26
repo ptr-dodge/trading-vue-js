@@ -39,7 +39,8 @@ module.exports = (env, options) => ({
         }),
         new WWPlugin(),
         new webpack.DefinePlugin({
-            MOB_DEBUG: JSON.stringify(process.env.MOB_DEBUG)
+            MOB_DEBUG: JSON.stringify(process.env.MOB_DEBUG),
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false)
         })
     ],
     devServer: {

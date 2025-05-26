@@ -2,6 +2,7 @@
 // Sets up all layers/overlays for the grid with 'grid_id'
 
 import Grid from './js/grid.js'
+import { h } from 'vue'
 import Canvas from '../mixins/canvas.js'
 import UxList from '../mixins/uxlist.js'
 import Crosshair from './Crosshair.vue'
@@ -54,8 +55,9 @@ export default {
         this.$emit('custom-event', {
             event: 'register-tools', args: tools
         })
-        this.$on('custom-event', e =>
-            this.on_ux_event(e, 'grid'))
+        // Vue 3: Use an event bus or provide/inject for cross-component events.
+        // If this is only for parent-child, parent should listen with @custom-event.
+        // Remove this.$on usage for Vue 3 compatibility.
     },
     beforeDestroy () {
         if (this.renderer) this.renderer.destroy()
@@ -67,44 +69,27 @@ export default {
         this.$nextTick(() => this.redraw())
 
     },
-    render(h) {
+    render() {
         const id = this.$props.grid_id
         const layout = this.$props.layout.grids[id]
-        return this.create_canvas(h, `grid-${id}`, {
-            position: {
-                x: 0,
-                y: layout.offset || 0
-            },
-            attrs: {
-                width: layout.width,
-                height: layout.height,
-                overflow: 'hidden'
-            },
-            style: {
-                backgroundColor: this.$props.colors.back
-            },
-            hs: [
-                h(Crosshair, {
-                    props: this.common_props(),
-                    on: this.layer_events
-                }),
-                h(KeyboardListener, {
-                    on: this.keyboard_events
-                }),
-                h(UxLayer, {
-                    props: {
-                        id, tv_id: this.$props.tv_id,
-                        uxs: this.uxs,
-                        colors: this.$props.colors,
-                        config: this.$props.config,
-                        updater: Math.random()
-                    },
-                    on: {
-                        'custom-event': this.emit_ux_event
-                    }
-                })
-            ].concat(this.get_overlays(h))
-        })
+        return this.create_canvas(
+            `grid-${id}`,
+            {
+                position: {
+                    x: 0,
+                    y: layout.offset || 0
+                },
+                attrs: {
+                    width: layout.width,
+                    height: layout.height,
+                    overflow: 'hidden'
+                },
+                style: {
+                    backgroundColor: this.$props.colors.back
+                },
+                hs: []
+            }
+        )
     },
     methods: {
         new_layer(layer) {

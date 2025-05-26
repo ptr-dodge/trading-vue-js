@@ -73,7 +73,7 @@ export default {
         },
         colorBack: {
             type: String,
-            default: '#121826'
+            default: '#0a0a0a'
         },
         colorGrid: {
             type: String,
@@ -81,7 +81,7 @@ export default {
         },
         colorText: {
             type: String,
-            default: '#dedddd'
+            default: '#ffffff'
         },
         colorTextHL: {
             type: String,
@@ -125,7 +125,7 @@ export default {
         },
         colorPanel: {
             type: String,
-            default: '#565c68'
+            default: '#23272e'
         },
         colorTbBack: {
             type: String

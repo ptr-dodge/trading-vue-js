@@ -51,6 +51,14 @@ export default {
         Botbar,
         Keyboard
     },
+    mounted() {
+        // Debug: log ohlcv and sub data to verify chart data flow
+        // Remove this after debugging
+        // eslint-disable-next-line no-console
+        console.log('[Chart.vue] ohlcv:', this.ohlcv);
+        // eslint-disable-next-line no-console
+        console.log('[Chart.vue] sub:', this.sub);
+    },
     created() {
 
         // Context for text measurements
@@ -112,7 +120,8 @@ export default {
         set_ytransform(s) {
             let obj = this.y_transforms[s.grid_id] || {}
             Object.assign(obj, s)
-            this.$set(this.y_transforms, s.grid_id, obj)
+            // Vue 3: direct assignment is reactive
+            this.y_transforms[s.grid_id] = obj
             this.update_layout()
             Utils.overwrite(this.range, this.range)
         },
@@ -300,7 +309,8 @@ export default {
         },
         // Datasets: candles, onchart, offchart indicators
         ohlcv() {
-            return this.$props.data.ohlcv || this.chart.data || []
+            // Always prefer chart.data, as DataCube moves ohlcv there
+            return (this.chart && this.chart.data) ? this.chart.data : (this.$props.data.ohlcv || [])
         },
         chart() {
             return this.$props.data.chart || { grid: {} }

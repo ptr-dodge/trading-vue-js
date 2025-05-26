@@ -64,13 +64,9 @@ export default class DataCube extends DCCore {
         let objects = this.get_by_query(query)
 
         for (var obj of objects) {
-
-            let i = obj.i !== undefined ?
-                obj.i :
-                obj.p.indexOf(obj.v)
-
+            let i = obj.i !== undefined ? obj.i : obj.p.indexOf(obj.v)
             if (i !== -1) {
-                this.tv.$set(obj.p, i, data)
+                obj.p[i] = data
             }
         }
 

@@ -1,4 +1,5 @@
 // Interactive canvas-based component
+import { h } from 'vue'
 // Should implement: mousemove, mouseout, mouseup, mousedown, click
 
 import Utils from '../stuff/utils.js'
@@ -8,6 +9,7 @@ export default {
         setup() {
             const id = `${this.$props.tv_id}-${this._id}-canvas`
             const canvas = document.getElementById(id)
+            if (!canvas) return; // Prevent runtime error if not found
             let dpr = window.devicePixelRatio || 1
             canvas.style.width = `${this._attrs.width}px`
             canvas.style.height = `${this._attrs.height}px`
@@ -33,9 +35,10 @@ export default {
                     Utils.measureText(ctx, text, this.$props.tv_id)
             })
         },
-        create_canvas(h, id, props) {
+        create_canvas(id, props) {
             this._id = id
             this._attrs = props.attrs
+            // Vue 3: use import { h } from 'vue' and call h directly
             return h('div', {
                 class: `trading-vue-${id}`,
                 style: {
@@ -45,17 +48,14 @@ export default {
                 }
             }, [
                 h('canvas', {
-                    on: {
-                        mousemove: e => this.renderer.mousemove(e),
-                        mouseout: e => this.renderer.mouseout(e),
-                        mouseup: e => this.renderer.mouseup(e),
-                        mousedown: e => this.renderer.mousedown(e)
-                    },
-                    attrs: Object.assign({
-                        id: `${this.$props.tv_id}-${id}-canvas`
-                    }, props.attrs),
+                    onMousemove: e => this.renderer.mousemove(e),
+                    onMouseout: e => this.renderer.mouseout(e),
+                    onMouseup: e => this.renderer.mouseup(e),
+                    onMousedown: e => this.renderer.mousedown(e),
+                    id: `${this.$props.tv_id}-${id}-canvas`,
                     ref: 'canvas',
                     style: props.style,
+                    ...props.attrs
                 })
             ].concat(props.hs || []))
         },

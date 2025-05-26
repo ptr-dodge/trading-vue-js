@@ -20,7 +20,7 @@ export default {
     },
     render(h) {
         const sett = this.$props.layout.botbar
-        return this.create_canvas(h, 'botbar', {
+        return this.create_canvas('botbar', {
             position: {
                 x: 0,
                 y: sett.offset || 0
